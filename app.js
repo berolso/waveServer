@@ -3,19 +3,28 @@ const morgan = require("morgan");
 
 // custom error class extensions
 const { NotFoundError } = require("./expressError");
+// authenticate token from user
+const { authenticateJWT } = require("./middleware/auth");
+
 
 const authRoutes = require("./routes/auth");
+const userRoutes = require('./routes/users')
 
 const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(authenticateJWT);
 
+
+app.use('/users', userRoutes)
 app.use("/auth", authRoutes);
 
 app.use("/", (req, res, next) => {
   return res.send("hi");
 });
+
+
 
 // handle 404 page not found errors.
 // no matching routes were found
