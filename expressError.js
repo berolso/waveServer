@@ -10,29 +10,29 @@ class WaveServerExpressError extends Error {
 
 // Not Found error
 class NotFoundError extends WaveServerExpressError {
-  constructor(message = 'Not Found'){
-    super(message, 404)
+  constructor(message = "Not Found") {
+    super(message, 404);
   }
 }
 
 // Unauthorized user error
-class UnauthorizedError extends WaveServerExpressError{
-  constructor(message = 'Unauthorized'){
-    super(message, 401)
+class UnauthorizedError extends WaveServerExpressError {
+  constructor(message = "Unauthorized") {
+    super(message, 401);
   }
 }
 
 // class BadRequestError
 class BadRequestError extends WaveServerExpressError {
-  constructor(message = 'Bad Request'){
-    super(message, 400)
+  constructor(message = "Bad Request") {
+    super(message, 400);
   }
 }
 
 // Forbidden Error
-class ForbiddenError extends WaveServerExpressError{
-  constructor(message = 'Bad Request'){
-    super(message, 403)
+class ForbiddenError extends WaveServerExpressError {
+  constructor(message = "Bad Request") {
+    super(message, 403);
   }
 }
 
