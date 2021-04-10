@@ -7,7 +7,7 @@ const {UnauthorizedError} = require('../expressError')
 /** Middleware: Authenticate user.
  *
  * If a token was provided, verify it, and, if valid, store the token payload
- * on res.locals (this will include the username and isAdmin field.)
+ * on res.locals (this will include the username, isAdmin, isFullAccess field.)
  *
  * It's not an error if no token was provided or if the token is not valid.
  */
@@ -55,6 +55,22 @@ const {UnauthorizedError} = require('../expressError')
   }
 }
 
+/** Middleware to use when they be logged in with full access.
+ *
+ *  If not, raises Unauthorized.
+ */
+
+ function ensureFullAccess(req, res, next) {
+  try {
+    if (!res.locals.user || !res.locals.user.isFullAccess) {
+      throw new UnauthorizedError("Full access permission required");
+    }
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 /** Middleware to use when they must provide a valid token & be user matching
  *  username provided as route param.
  *
@@ -77,5 +93,6 @@ module.exports = {
   authenticateJWT,
   ensureLoggedIn,
   ensureAdmin,
+  ensureFullAccess,
   ensureCorrectUserOrAdmin,
 };

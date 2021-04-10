@@ -13,7 +13,8 @@
           "lastName": "Last",
           "email": "test@getMaxListeners.com",
           "phoneNumber": "(123)234-2345",
-          "isAdmin": true
+          "isAdmin": true,
+          "isFullAccess": false
       }
   ],
   "required": [

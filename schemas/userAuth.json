@@ -35,6 +35,16 @@
           "examples": [
               "password"
           ]
+      },
+      "isFullAccess": {
+          "$id": "#/properties/isFullAccess",
+          "type": "boolean",
+          "title": "The isFullAccess schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [
+              true
+          ]
       }
   },
   "additionalProperties": false

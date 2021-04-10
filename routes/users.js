@@ -15,8 +15,8 @@ const { createToken } = require("../helpers/tokens");
 
 const router = express.Router();
 
-// register new user from signup form
-router.post("/", async (req, res, next) => {
+// create new user as admin
+router.post("/", ensureAdmin, async (req, res, next) => {
   try {
     const validator = jsonschema.validate(req.body, userNewSchema);
     if (!validator.valid) {
@@ -32,7 +32,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // get all users
-router.get("/", async (req, res, next) => {
+router.get("/", ensureAdmin, async (req, res, next) => {
   try {
     const users = await User.findAll();
     return res.json({ users });

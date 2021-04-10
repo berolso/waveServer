@@ -8,5 +8,6 @@ CREATE TABLE users (
   email TEXT UNIQUE NOT NULL
     CHECK (position('@' IN email) > 1),
   phone_number TEXT UNIQUE NOT NULL,
-  is_admin BOOLEAN NOT NULL DEFAULT FALSE
+  is_admin BOOLEAN NOT NULL DEFAULT FALSE,
+  is_fullaccess BOOLEAN NOT NULL DEFAULT FALSE
 );

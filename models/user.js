@@ -18,7 +18,9 @@ class User {
               first_name AS "firstName",
               last_name AS "lastName",
               email,
-              is_admin AS "isAdmin"
+              phoneNumber,
+              is_admin AS "isAdmin",
+              is_full_access AS "isFullAccess"
        FROM users
        WHERE username = $1`,
       [username]
@@ -46,6 +48,7 @@ class User {
     email,
     phoneNumber,
     isAdmin,
+    isFullAccess
   }) {
     const duplicateCheck = await db.query(
       `SELECT username
@@ -69,9 +72,10 @@ class User {
         last_name,
         email,
         phone_number,
-        is_admin)
+        is_admin,
+        is_full_access)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
-       RETURNING username, first_name AS "firstName", last_name AS "lastName", email, phone_number AS "phoneNumber", is_admin AS "isAdmin"`,
+       RETURNING username, first_name AS "firstName", last_name AS "lastName", email, phone_number AS "phoneNumber", is_admin AS "isAdmin", is_full_access AS "isFullAccess"`,
       [
         username,
         hashedPassword,
@@ -80,6 +84,7 @@ class User {
         email,
         phoneNumber,
         isAdmin,
+        isFullAccess,
       ]
     );
 
@@ -94,7 +99,9 @@ class User {
       first_name AS "firstName",
       last_name AS "lastName",
       email,
-      is_admin AS "isAdmin"
+      phone_number,
+      is_admin AS "isAdmin",
+      is_full_access
       FROM users
       ORDER BY username`
     );
@@ -111,7 +118,9 @@ class User {
     first_name AS "firstName",
     last_name AS "lastName",
     email,
-    is_admin AS "isAdmin"
+    phone_number,
+    is_admin AS "isAdmin",
+    is_full_access
     FROM users
     WHERE username = $1`,
       [username]
@@ -133,7 +142,9 @@ class User {
     const { setCols, values } = sqlForPartialUpdate(data, {
       firstName: "first_name",
       lastName: "last_name",
+      phoneNumber: "phone_number",
       isAdmin: "is_admin",
+      isFullAccess: "is_full_access"
     });
     const usernameVarIdx = "$" + (values.length + 1);
 
@@ -144,7 +155,9 @@ class User {
       first_name AS "firstName",
       last_name AS "lastName",
       email,
-      is_admin AS "isAdmin"`;
+      phone_number,
+      is_admin AS "isAdmin",
+      is_full_access AS "isFullAccess"`;
     const result = await db.query(querySql, [...values, username]);
     const user = result.rows[0];
 

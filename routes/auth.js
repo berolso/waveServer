@@ -9,12 +9,6 @@ const { BadRequestError } = require("../expressError");
 
 const router = new express.Router();
 
-const testData = [
-  {
-    key: "test",
-  },
-];
-
 // register new user
 // POST /auth/register {user} => {token}
 // user must include { username, password, firstName, lastName, email, phone }
@@ -33,7 +27,7 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
-// get token for authentication for further authentication
+// get token for authentication. for login
 
 router.post("/token", async (req, res, next) => {
   try {
