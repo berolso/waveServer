@@ -9,6 +9,7 @@ const { authenticateJWT } = require("./middleware/auth");
 
 const authRoutes = require("./routes/auth");
 const userRoutes = require('./routes/users')
+const instructionalRoutes = require('./routes/instructionals')
 
 const app = express();
 
@@ -17,12 +18,13 @@ app.use(morgan("dev"));
 app.use(authenticateJWT);
 
 
-app.use('/users', userRoutes)
 app.use("/auth", authRoutes);
+app.use('/users', userRoutes)
+app.use('/instructionals', instructionalRoutes)
 
-app.use("/", (req, res, next) => {
-  return res.send("hi");
-});
+// app.use("/", (req, res, next) => {
+//   return res.send("hi");
+// });
 
 
 

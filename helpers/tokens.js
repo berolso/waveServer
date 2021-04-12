@@ -10,6 +10,7 @@ function createToken(user) {
   let payload = {
     username: user.username,
     isAdmin: user.isAdmin || false,
+    isFullAccess: user.isFullAccess || false
   };
 
   return jwt.sign(payload, SECRET_KEY);

@@ -3,8 +3,8 @@ const jsonschema = require("jsonschema");
 
 const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
-const userAuthSchema = require("../schemas/userAuth.json");
-const userRegisterSchema = require("../schemas/userRegister.json");
+const userAuthSchema = require("../schemas/users/userAuth.json");
+const userRegisterSchema = require("../schemas/users/userRegister.json");
 const { BadRequestError } = require("../expressError");
 
 const router = new express.Router();
@@ -19,7 +19,7 @@ router.post("/register", async (req, res, next) => {
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-    const newUser = await User.register({ ...req.body, isAdmin: false });
+    const newUser = await User.register({ ...req.body, isAdmin: false, isFullAccess: false });
     const token = createToken(newUser);
     return res.status(201).json({ token });
   } catch (err) {

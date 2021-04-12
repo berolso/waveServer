@@ -1,8 +1,7 @@
+const jwt = require("jsonwebtoken");
 
-const jwt = require('jsonwebtoken')
-
-const {SECRET_KEY} = require('../config')
-const {UnauthorizedError} = require('../expressError')
+const { SECRET_KEY } = require("../config");
+const { UnauthorizedError } = require("../expressError");
 
 /** Middleware: Authenticate user.
  *
@@ -12,7 +11,7 @@ const {UnauthorizedError} = require('../expressError')
  * It's not an error if no token was provided or if the token is not valid.
  */
 
- function authenticateJWT(req, res, next) {
+function authenticateJWT(req, res, next) {
   try {
     const authHeader = req.headers && req.headers.authorization;
     if (authHeader) {
@@ -30,7 +29,7 @@ const {UnauthorizedError} = require('../expressError')
  * If not, raises Unauthorized.
  */
 
- function ensureLoggedIn(req, res, next) {
+function ensureLoggedIn(req, res, next) {
   try {
     if (!res.locals.user) throw new UnauthorizedError();
     return next();
@@ -44,7 +43,7 @@ const {UnauthorizedError} = require('../expressError')
  *  If not, raises Unauthorized.
  */
 
- function ensureAdmin(req, res, next) {
+function ensureAdmin(req, res, next) {
   try {
     if (!res.locals.user || !res.locals.user.isAdmin) {
       throw new UnauthorizedError();
@@ -60,7 +59,7 @@ const {UnauthorizedError} = require('../expressError')
  *  If not, raises Unauthorized.
  */
 
- function ensureFullAccess(req, res, next) {
+function ensureFullAccess(req, res, next) {
   try {
     if (!res.locals.user || !res.locals.user.isFullAccess) {
       throw new UnauthorizedError("Full access permission required");
@@ -77,7 +76,7 @@ const {UnauthorizedError} = require('../expressError')
  *  If not, raises Unauthorized.
  */
 
- function ensureCorrectUserOrAdmin(req, res, next) {
+function ensureCorrectUserOrAdmin(req, res, next) {
   try {
     const user = res.locals.user;
     if (!(user && (user.isAdmin || user.username === req.params.username))) {

@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+      {
+          "username": "usrnm",
+          "password": "password",
+          "firstName": "Bob",
+          "lastName": "Last",
+          "email": "test@getMaxListeners.com",
+          "phoneNumber": "(123)234-2345",
+          "isAdmin": true,
+          "isFullAccess": false
+      }
+  ],
+  "required": [
+      "username"
+  ],
+  "properties": {
+      "username": {
+          "$id": "#/properties/username",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "title": "The username schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+              "usrnm"
+          ]
+      },
+      "password": {
+          "$id": "#/properties/password",
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 20,
+          "title": "The password schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+              "password"
+          ]
+      },
+      "firstName": {
+          "$id": "#/properties/firstName",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "title": "The firstName schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+              "Bob"
+          ]
+      },
+      "lastName": {
+          "$id": "#/properties/lastName",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30,
+          "title": "The lastName schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+              "Last"
+          ]
+      },
+      "email": {
+          "$id": "#/properties/email",
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 60,
+          "format": "email",
+          "title": "The email schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+              "test@getMaxListeners.com"
+          ]
+      },
+      "phoneNumber": {
+          "$id": "#/properties/phoneNumber",
+          "type": "string",
+          "title": "The phoneNumber schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+              "(123)234-2345"
+          ]
+      },
+      "isAdmin": {
+          "$id": "#/properties/isAdmin",
+          "type": "boolean",
+          "title": "The isAdmin schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [
+              true
+          ]
+      },
+      "isFullAccess": {
+          "$id": "#/properties/isFullAccess",
+          "type": "boolean",
+          "title": "The isFullAccess schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [
+              true
+          ]
+      }
+  },
+  "additionalProperties": false
+}

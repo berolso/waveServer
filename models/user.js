@@ -18,7 +18,7 @@ class User {
               first_name AS "firstName",
               last_name AS "lastName",
               email,
-              phoneNumber,
+              phone_number AS "phoneNumber",
               is_admin AS "isAdmin",
               is_full_access AS "isFullAccess"
        FROM users
@@ -74,7 +74,7 @@ class User {
         phone_number,
         is_admin,
         is_full_access)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING username, first_name AS "firstName", last_name AS "lastName", email, phone_number AS "phoneNumber", is_admin AS "isAdmin", is_full_access AS "isFullAccess"`,
       [
         username,
@@ -144,7 +144,7 @@ class User {
       lastName: "last_name",
       phoneNumber: "phone_number",
       isAdmin: "is_admin",
-      isFullAccess: "is_full_access"
+      isFullAccess: "is_full_access",
     });
     const usernameVarIdx = "$" + (values.length + 1);
 
