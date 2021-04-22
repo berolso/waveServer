@@ -11,7 +11,7 @@ const { sqlForPartialUpdate } = require("../helpers/sql");
 
 class User {
   // authenticate user
-  static async authenticate(username, password) {
+  static async authenticate(email, password) {
     const result = await db.query(
       `SELECT username,
               password,
@@ -22,11 +22,10 @@ class User {
               is_admin AS "isAdmin",
               is_full_access AS "isFullAccess"
        FROM users
-       WHERE username = $1`,
-      [username]
+       WHERE email = $1`,
+      [email]
     );
     const user = result.rows[0];
-
     if (user) {
       // compare hashed password to a new hash from password
       const isValid = await bcrypt.compare(password, user.password);
@@ -48,7 +47,7 @@ class User {
     email,
     phoneNumber,
     isAdmin,
-    isFullAccess
+    isFullAccess,
   }) {
     const duplicateCheck = await db.query(
       `SELECT username
@@ -118,9 +117,9 @@ class User {
     first_name AS "firstName",
     last_name AS "lastName",
     email,
-    phone_number,
+    phone_number AS "phoneNumber",
     is_admin AS "isAdmin",
-    is_full_access
+    is_full_access AS "isFullAccess"
     FROM users
     WHERE username = $1`,
       [username]

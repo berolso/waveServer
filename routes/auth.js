@@ -19,7 +19,11 @@ router.post("/register", async (req, res, next) => {
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-    const newUser = await User.register({ ...req.body, isAdmin: false, isFullAccess: false });
+    const newUser = await User.register({
+      ...req.body,
+      isAdmin: false,
+      isFullAccess: false,
+    });
     const token = createToken(newUser);
     return res.status(201).json({ token });
   } catch (err) {
@@ -31,15 +35,15 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/token", async (req, res, next) => {
   try {
-    const validator = jsonschema.validate(req.body, userAuthSchema);
+    const validator = jsonschema.validate(req.body.data, userAuthSchema);
     if (!validator.valid) {
       const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-    const { username, password } = req.body;
-    const user = await User.authenticate(username, password);
-    const token = createToken(user)
-    return res.json({token})
+    const { email, password } = req.body;
+    const user = await User.authenticate(email, password);
+    const token = createToken(user);
+    return res.json({ token });
   } catch (err) {
     return next(err);
   }

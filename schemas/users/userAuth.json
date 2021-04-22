@@ -7,19 +7,19 @@
   "default": {},
   "examples": [
       {
-          "username": "usrnm",
+          "email": "user@user.com",
           "password": "password"
       }
   ],
   "required": [
-      "username",
+      "email",
       "password"
   ],
   "properties": {
-      "username": {
-          "$id": "#/properties/username",
+      "email": {
+          "$id": "#/properties/email",
           "type": "string",
-          "title": "The username schema",
+          "title": "The email schema",
           "description": "An explanation about the purpose of this instance.",
           "default": "",
           "examples": [
