@@ -6,6 +6,7 @@ const { ensureAdmin, ensureFullAccess } = require("../middleware/auth");
 const Instructional = require("../models/instructional");
 const instructionalNewSchema = require("../schemas/instructionals/instructionalNew.json");
 const instuctionalUpdateSchema = require("../schemas/instructionals/instructionalUpdate.json");
+const Slack = require('../models/slack')
 
 const router = new express.Router();
 
@@ -64,6 +65,24 @@ router.delete("/:id", ensureAdmin, async (req, res, next) => {
   try {
     await Instructional.delete(req.params.id);
     return res.json({ deleted: req.params.id });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// incoming request to be sent to Slack API
+router.post("/request", ensureFullAccess, async (req, res, next) => {
+  try {
+    // const validator = jsonschema.validate(req.body, instructionalNewSchema);
+    // if (!validator.valid) {
+    //   const errs = validator.errors.map((e) => e.stack);
+    //   throw new BadRequestError(errs);
+    // }
+    // const instructional = await Instructional.create(req.body);
+    const response = await Slack.sendRequest(req.body)
+    console.log(response)
+    console.log('received', req.body)
+    return res.status(201).json({ "instructional": "toSlack" });
   } catch (err) {
     return next(err);
   }
