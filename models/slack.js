@@ -7,10 +7,10 @@ const web = new WebClient(SLACK_TOKEN);
 const currentTime = new Date().toTimeString();
 
 class Slack {
-  // authenticate user
-  static async sendRequest(data) {
+  // use this method to format blocks with external image url's and requests sent without an attached image
+  static async sendRequest(data, files) {
+    console.log("data/files", data, files);
     try {
-
       // format slack web api blocks
       const blocks = [
         {
@@ -24,7 +24,7 @@ class Slack {
           type: "image",
           title: {
             type: "plain_text",
-            text: data.description,
+            text: data.description || "No description provided",
             emoji: true,
           },
           image_url:
@@ -41,12 +41,47 @@ class Slack {
 
       // Use the `chat.postMessage` method to send a message from this app
       const result = await web.chat.postMessage(slackObj);
-      console.log("Slack", result);
+      console.log('result', result);
     } catch (error) {
       return console.log(error);
     }
 
     console.log("Message posted!");
+  }
+
+  // handle multiple file uploads to slack channel
+  static async sendImages(json, files) {
+    console.log('json/files',json, files);
+
+    // files can olny be added 1 at a time. loop through and request
+    // TODO: replace with promiseAll and .map() to execute in parrelel  
+    for (let i in files) {
+      // format object for slack files upload 
+      const slackObj = {
+        channels: "waveserver-request",
+        file: files[i].data,
+        initial_comment: `${+i + 1} of ${files.length}`,
+        filename: files[i].name,
+        title: files[i].name,
+      };
+
+      // format first image to include json data as first comment
+      if (+i === 0) {
+        slackObj.initial_comment = `${json.firstName} ${json.lastName} - ${json.username} ${json.phoneNumber} ${json.email}
+        Description: 
+        ${json.description}
+
+        ${+i + 1} of ${files.length} images`;
+      }
+
+      try {
+        // Call the files.upload method using the WebClient
+        const result = await web.files.upload(slackObj);
+        console.log("result", result);
+      } catch (err) {
+        console.error("oopsy", err);
+      }
+    }
   }
 }
 

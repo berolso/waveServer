@@ -1,32 +1,30 @@
 const express = require("express");
 const morgan = require("morgan");
+const fileUpLoad = require("express-fileupload");
 
 // custom error class extensions
 const { NotFoundError } = require("./expressError");
 // authenticate token from user
 const { authenticateJWT } = require("./middleware/auth");
 
-
 const authRoutes = require("./routes/auth");
-const userRoutes = require('./routes/users')
-const instructionalRoutes = require('./routes/instructionals')
+const userRoutes = require("./routes/users");
+const instructionalRoutes = require("./routes/instructionals");
 
 const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(authenticateJWT);
-
+app.use(fileUpLoad());
 
 app.use("/auth", authRoutes);
-app.use('/users', userRoutes)
-app.use('/instructionals', instructionalRoutes)
+app.use("/users", userRoutes);
+app.use("/instructionals", instructionalRoutes);
 
 // app.use("/", (req, res, next) => {
 //   return res.send("hi");
 // });
-
-
 
 // handle 404 page not found errors.
 // no matching routes were found

@@ -6,7 +6,7 @@ const { ensureAdmin, ensureFullAccess } = require("../middleware/auth");
 const Instructional = require("../models/instructional");
 const instructionalNewSchema = require("../schemas/instructionals/instructionalNew.json");
 const instuctionalUpdateSchema = require("../schemas/instructionals/instructionalUpdate.json");
-const Slack = require('../models/slack')
+const Slack = require("../models/slack");
 
 const router = new express.Router();
 
@@ -29,7 +29,6 @@ router.post("/", ensureAdmin, async (req, res, next) => {
       throw new BadRequestError(errs);
     }
     const instructional = await Instructional.create(req.body);
-    console.log(instructional)
     return res.status(201).json({ instructional });
   } catch (err) {
     return next(err);
@@ -72,17 +71,22 @@ router.delete("/:id", ensureAdmin, async (req, res, next) => {
 
 // incoming request to be sent to Slack API
 router.post("/request", ensureFullAccess, async (req, res, next) => {
+  // if no images are sent
+  if (req.files === null) {
+    console.log("no image file sent", req.files);
+    res.status(400).json({ msg: "No file uploaded" });
+    try {
+      await Slack.sendRequest(JSON.parse(req.body.json));
+      return res.status(201).json({ instructionals: "no image sent to slack" });
+    } catch (err) {
+      return next(err);
+    }
+  }
   try {
-    // const validator = jsonschema.validate(req.body, instructionalNewSchema);
-    // if (!validator.valid) {
-    //   const errs = validator.errors.map((e) => e.stack);
-    //   throw new BadRequestError(errs);
-    // }
-    // const instructional = await Instructional.create(req.body);
-    const response = await Slack.sendRequest(req.body)
-    console.log(response)
-    console.log('received', req.body)
-    return res.status(201).json({ "instructional": "toSlack" });
+    console.log("req.files", req.files);
+    const files = req.files.files || [];
+    await Slack.sendImages(JSON.parse(req.body.json), files);
+    return res.status(201).json({ instructional: "Images sent to slack" });
   } catch (err) {
     return next(err);
   }
