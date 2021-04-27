@@ -98,9 +98,9 @@ class User {
       first_name AS "firstName",
       last_name AS "lastName",
       email,
-      phone_number,
+      phone_number AS "phoneNumber",
       is_admin AS "isAdmin",
-      is_full_access
+      is_full_access AS "isFullAccess"
       FROM users
       ORDER BY username`
     );
@@ -154,7 +154,7 @@ class User {
       first_name AS "firstName",
       last_name AS "lastName",
       email,
-      phone_number,
+      phone_number AS "phoneNumber",
       is_admin AS "isAdmin",
       is_full_access AS "isFullAccess"`;
     const result = await db.query(querySql, [...values, username]);
