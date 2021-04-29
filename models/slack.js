@@ -41,7 +41,7 @@ class Slack {
 
       // Use the `chat.postMessage` method to send a message from this app
       const result = await web.chat.postMessage(slackObj);
-      console.log('result', result);
+      console.log("result", result);
     } catch (error) {
       return console.log(error);
     }
@@ -51,12 +51,12 @@ class Slack {
 
   // handle multiple file uploads to slack channel
   static async sendImages(json, files) {
-    console.log('json/files',json, files);
+    console.log("json/files", json, files);
 
     // files can olny be added 1 at a time. loop through and request
-    // TODO: replace with promiseAll and .map() to execute in parrelel  
+    // TODO: replace with promiseAll and .map() to execute in parrelel
     for (let i in files) {
-      // format object for slack files upload 
+      // format object for slack files upload
       const slackObj = {
         channels: "waveserver-request",
         file: files[i].data,
@@ -67,7 +67,9 @@ class Slack {
 
       // format first image to include json data as first comment
       if (+i === 0) {
-        slackObj.initial_comment = `${json.firstName} ${json.lastName} - ${json.username} ${json.phoneNumber} ${json.email}
+        slackObj.initial_comment = `${json.firstName} ${json.lastName} - ${
+          json.username
+        } ${json.phoneNumber} ${json.email}
         Description: 
         ${json.description}
 

@@ -2,6 +2,12 @@ const express = require("express");
 const morgan = require("morgan");
 const fileUpLoad = require("express-fileupload");
 
+// slack events api
+const { createEventAdapter } = require("@slack/events-api");
+const { slackSigningSecret } = require("./config");
+
+const slackEvents = createEventAdapter(slackSigningSecret);
+
 // custom error class extensions
 const { NotFoundError } = require("./expressError");
 // authenticate token from user
@@ -13,6 +19,8 @@ const instructionalRoutes = require("./routes/instructionals");
 
 const app = express();
 
+
+app.use("/slack/events", slackEvents.expressMiddleware());
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(authenticateJWT);
@@ -22,9 +30,31 @@ app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/instructionals", instructionalRoutes);
 
-// app.use("/", (req, res, next) => {
-//   return res.send("hi");
-// });
+slackEvents.on("app_mention", async (event) => {
+  console.log("slackevent");
+  try {
+    console.log(event);
+    console.log("I got a mention in this channel", event.channel);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+slackEvents.on("message", async (event) => {
+  console.log("slackevent");
+  try {
+    console.dir(event);
+    console.log("message.im", blocks);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+slackEvents.on("error", (error) => {
+  console.log("ERERE", error); // TypeError
+  // return next()
+});
+
 
 // handle 404 page not found errors.
 // no matching routes were found
