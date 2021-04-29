@@ -2,59 +2,32 @@ const express = require("express");
 const morgan = require("morgan");
 const fileUpLoad = require("express-fileupload");
 
-// slack events api
-const { createEventAdapter } = require("@slack/events-api");
-const { slackSigningSecret } = require("./config");
-
-const slackEvents = createEventAdapter(slackSigningSecret);
-
 // custom error class extensions
 const { NotFoundError } = require("./expressError");
 // authenticate token from user
 const { authenticateJWT } = require("./middleware/auth");
-
+// routes folders
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/users");
 const instructionalRoutes = require("./routes/instructionals");
+const slackEventsAPI = require("./middleware/slackEventsAPI");
 
 const app = express();
 
+// endpoint to listen for slack Events API requests
+// IMPORTANT must come before parse(express.json)
+app.use("/slack/events", slackEventsAPI);
 
-app.use("/slack/events", slackEvents.expressMiddleware());
+// middlewares
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(authenticateJWT);
 app.use(fileUpLoad());
 
+// routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/instructionals", instructionalRoutes);
-
-slackEvents.on("app_mention", async (event) => {
-  console.log("slackevent");
-  try {
-    console.log(event);
-    console.log("I got a mention in this channel", event.channel);
-  } catch (e) {
-    console.log(e);
-  }
-});
-
-slackEvents.on("message", async (event) => {
-  console.log("slackevent");
-  try {
-    console.dir(event);
-    console.log("message.im", blocks);
-  } catch (e) {
-    console.log(e);
-  }
-});
-
-slackEvents.on("error", (error) => {
-  console.log("ERERE", error); // TypeError
-  // return next()
-});
-
 
 // handle 404 page not found errors.
 // no matching routes were found
