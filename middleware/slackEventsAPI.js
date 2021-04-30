@@ -1,6 +1,7 @@
 const express = require("express");
 const router = new express.Router();
 const Slack = require("../models/slack");
+const Instructional = require("../models/instructional");
 
 // slack events api
 const { createEventAdapter } = require("@slack/events-api");
@@ -21,20 +22,36 @@ slackEvents.on("app_mention", async (event) => {
   }
 });
 
-// listen for any messages where waveServer bot is involved
+// listen for any messages where waveServer bot is involved. if includes a file send to db.
 slackEvents.on("message", async (event) => {
   console.log("slackevent");
   try {
-    console.log("event%", event);
-    // slack code block should look like this
-    //  {"title":"This is The Title","date":"July 13, 2021","description":"Here's some sample description of the instructional"}
+    if (event.files) {
+      console.log("event%", event);
+      // slack code block should look like this
+      //  {"title":"This is The Title","date":"July 13, 2021","description":"Here's some sample description of the instructional"}
 
-    // parse slack text line code to obj
-    const json = event.text.replace(/```/g, "");
-    const obj = JSON.parse(json);
-    console.log("obj", obj);
-    // send confirmation text to slack thread
-    await Slack.instrucitonalConfirmation(event);
+      // parse slack text line code to obj
+      const json = event.text.replace(/```/g, "");
+      const obj = JSON.parse(json);
+      console.log("obj", obj);
+      // send confirmation text to slack thread
+      await Slack.instrucitonalConfirmation(event);
+
+      // create insturcional object
+      const instructionalObj = {
+        name: obj.title,
+        section_id: 1,
+        json: {
+          ...obj,
+          url_private_download: event.files[0].url_private_download,
+          permalink_public: event.files[0].permalink_public,
+        },
+      };
+      console.log("instructionalObj", instructionalObj);
+      let res = await Instructional.create(instructionalObj);
+      console.log("res", res);
+    }
   } catch (e) {
     console.log(e);
   }
