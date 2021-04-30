@@ -85,6 +85,23 @@ class Slack {
       }
     }
   }
+  // send confirmation to slack that instructional was successfully parsed
+  static async instrucitonalConfirmation(event) {
+    console.log("event", event);
+    const slackObj = {
+      channel: event.channel,
+      text: "ok cool. Got it all parsed up.",
+      thread_ts: event.thread_ts,
+    };
+
+    try {
+      // Call the chat.postMessage method using the WebClient
+      const result = await web.chat.postMessage(slackObj);
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
 
 module.exports = Slack;
