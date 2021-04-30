@@ -83,8 +83,9 @@ router.post("/request", ensureFullAccess, async (req, res, next) => {
     }
   }
   try {
-    console.log("req.files", req.files);
-    const files = req.files.files || [];
+    // format to array if single image is sent
+    const files = req.files.files.length ? req.files.files : [req.files.files];
+    // send form data and image array to slack 
     await Slack.sendImages(JSON.parse(req.body.json), files);
     return res.status(201).json({ instructional: "Images sent to slack" });
   } catch (err) {

@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const fileUpLoad = require("express-fileupload");
+const cors = require("cors");
 
 // custom error class extensions
 const { NotFoundError } = require("./expressError");
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(authenticateJWT);
 app.use(fileUpLoad());
+app.use(cors())
 
 // routes
 app.use("/auth", authRoutes);
