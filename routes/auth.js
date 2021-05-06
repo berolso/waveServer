@@ -16,7 +16,16 @@ router.post("/register", async (req, res, next) => {
   try {
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map((e) => e.stack);
+      const errs = validator.errors.map((e) =>
+        // allow for custom errors hand coded into into jsonschema with the customErrors property
+        // console.log(
+        //   "^^^^",
+        //   validator.schema.properties[e.path].customError
+        // ),
+        validator.schema.properties[e.path].customError
+          ? validator.schema.properties[e.path[0]].customError[e.name]
+          : e.stack
+      );
       throw new BadRequestError(errs);
     }
     const newUser = await User.register({

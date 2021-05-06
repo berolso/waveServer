@@ -22,6 +22,7 @@ slackEvents.on("app_mention", async (event) => {
 
 // listen for any messages where waveServer bot is involved. if includes a file send to db.
 slackEvents.on("message", async (event) => {
+  console.log('i heard that');
   try {
     if (event.files) {
       // slack code block should look like this

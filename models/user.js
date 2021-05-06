@@ -33,8 +33,8 @@ class User {
         delete user.password;
         return user;
       }
-      throw new UnauthorizedError("Invalid username/password");
     }
+    throw new UnauthorizedError("Invalid username/password");
   }
 
   // CREATE
